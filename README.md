@@ -29,7 +29,7 @@ Example:-
 Database state:
 ```json
 {
-	id                   1                   
+	"id"                  "1"                   
   "phoneNumber"          "123456"
   "email"                "lorraine@hillvalley.edu"
   "linkedId"             "null"
@@ -39,7 +39,7 @@ Database state:
   "deletedAt"            "null"
 },
 {
-	id                   23                   
+	"id"                   "23"                   
   "phoneNumber"          "123456"
   "email"                "mcfly@hillvalley.edu"
   "linkedId"             "1"
