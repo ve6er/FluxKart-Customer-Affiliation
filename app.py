@@ -51,20 +51,26 @@ def identify():
             # Look for the primary contact
             cursor.execute("SELECT * FROM Contact")
             database = cursor.fetchall()
-            #Searching for a primary contact with either the same email or the same phone number
-            primary_contact = min(database, key=lambda v: v['createdAt'] if v['linkPrecedence'] == 'primary' 
-                                  and (v['email']==contact['email'] or v['phoneNumber']==contact['phoneNumber'])else datetime.max)
-            primary_id = primary_contact['id'] if primary_contact['linkPrecedence'] == 'primary' else primary_contact['linkedId']
 
-            # The request has to be treated as a new entry to the database
-            now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            cursor.execute("""
-                INSERT INTO Contact (email, phoneNumber, linkedId, linkPrecedence, createdAt, updatedAt)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """, (email, phone_number, primary_id, 'secondary', now, now))
-            connection.commit()
+            # Get all primary contacts from matches
+            primary_contacts = [c for c in matches if c['linkPrecedence'] == 'primary']
+            if len(primary_contacts) >= 2:
+                # Merging two primary contacts
+                primary_contacts_sorted = sorted(primary_contacts, key=lambda v: v['createdAt'])
+                primary = primary_contacts_sorted[0]
+                secondary = primary_contacts_sorted[1]
+
+                # Update the later created one to secondary
+                now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                cursor.execute("""
+                    UPDATE Contact
+                    SET linkedId = %s, linkPrecedence = 'secondary', updatedAt = %s
+                    WHERE id = %s
+                """, (primary['id'], now, secondary['id']))
+                connection.commit()
 
             # Re-fetch all related contacts
+            primary_id = min(matches, key=lambda v: v['createdAt'])['id']
             cursor.execute("""
                 SELECT * FROM Contact
                 WHERE id = %s OR linkedId = %s
@@ -100,6 +106,7 @@ def identify():
         if 'connection' in locals() and connection.is_connected():
             cursor.close()
             connection.close()
+
 
 #Creating an array of all the affiliated emails, phone numbers and ID's 
 def format_response(primary_id, database):
