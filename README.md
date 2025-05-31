@@ -12,7 +12,7 @@ The API connects to a MySQL database hosted on Aiven, which has the database Flu
 The table has the following properties:
 ```json
 {
-	id                   Int                   
+	"id"                   "Int"                   
   "phoneNumber"          "String"
   "email"                "String"
   "linkedId"             "Int" 
