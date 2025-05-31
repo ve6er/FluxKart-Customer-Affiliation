@@ -54,7 +54,7 @@ def identify():
 
             # Get all primary contacts from matches
             primary_contacts = [c for c in matches if c['linkPrecedence'] == 'primary']
-            if len(primary_contacts) >= 2:
+            if len(primary_contacts) == 2:
                 # Merging two primary contacts
                 primary_contacts_sorted = sorted(primary_contacts, key=lambda v: v['createdAt'])
                 primary = primary_contacts_sorted[0]
