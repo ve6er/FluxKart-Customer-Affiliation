@@ -6,7 +6,7 @@ This is a web service hosted on Render that receives HTTP POST requests in the f
 	"email": string,
 	"phoneNumber": number
 }
-```
+
 The API connects to a MySQL database hosted on Aiven, which has the database Fluxkart with a column Contact:
 The table has the following properties:
 ```json
