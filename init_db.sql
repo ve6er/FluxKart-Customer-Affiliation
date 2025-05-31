@@ -2,6 +2,18 @@ CREATE DATABASE FluxKart;
 
 USE FluxKart;
 
+CREATE TABLE Contact (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    phoneNumber VARCHAR(20),
+    email VARCHAR(255),
+    linkedId INT,
+    linkPrecedence ENUM('primary', 'secondary') NOT NULL DEFAULT 'primary',
+    createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deletedAt DATETIME DEFAULT NULL,
+    FOREIGN KEY (linkedId) REFERENCES Contact(id)
+);
+
 INSERT INTO Contact (
     id, phoneNumber, email, linkedId, linkPrecedence, createdAt, updatedAt, deletedAt
 ) VALUES (
